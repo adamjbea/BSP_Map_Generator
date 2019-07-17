@@ -1,10 +1,11 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Leaf extends Rectangle {
 
-    private final int MIN_LEAF_SIZE = 40;
+    private final int MIN_LEAF_SIZE = 100;
 
     public int x, y, width, height;
 
@@ -23,59 +24,36 @@ public class Leaf extends Rectangle {
 
     }
 
-    public boolean split(){
-
-        if (this.leftChild != null || this.rightChild != null){
-            return false;
-        }
-
+    public void split(){
         Random rand = new Random();
-        double split_chance = rand.nextInt(100);
-        boolean split_horizontal;
-        if (split_chance > 50){
-            split_horizontal = true;
-        }
-        else{
-            split_horizontal = false;
-        }
-        if (this.width > this.height && width / height >= 1.25){
-            split_horizontal = false;
-        } else if (this.height > this.width && height / width >= 1.25){
-            split_horizontal = true;
-        }
+        int split;
+        int ratio = this.width - this.height;
+        if (ratio > 0){
+            split = ThreadLocalRandom.current().nextInt(x + (width / 4), x + (width * 3 / 4) + 1);
+            this.leftChild = new Leaf(this.x, this.y, split - this.x, this.height );
+            this.rightChild = new Leaf(split, this.y, this.x + this.width - split, this.height);
 
-        int max;
-
-        if (split_horizontal){
-
-            max = height;
-
+        }else if (ratio < 0) {
+            split = ThreadLocalRandom.current().nextInt(y + (height / 4), y + (height * 3 / 4) + 1);
+            this.leftChild = new Leaf(this.x, this.y, this.width, split - this.y);
+            this.rightChild = new Leaf(this.x, split, this.width, this.y + this.height - split);
         } else {
-
-            max = width;
+            int split_choice = rand.nextInt(1);
+            if (split_choice == 0){
+                split = ThreadLocalRandom.current().nextInt(x + (width / 4), x + (width * 3 / 4) + 1);
+                this.leftChild = new Leaf(this.x, this.y, split - this.x, this.height );
+                this.rightChild = new Leaf(split, this.y, this.x + this.width - split, this.height);
+            } else {
+                split = ThreadLocalRandom.current().nextInt(y + (height / 4), y + (height * 3 / 4) + 1);
+                this.leftChild = new Leaf(this.x, this.y, this.width, split - this.y);
+                this.rightChild = new Leaf(this.x, split, this.width, this.y + this.height - split);
+            }
         }
+    }
 
-        if (max <=  MIN_LEAF_SIZE){
-            return false;
-        }
-
-        int split = rand.nextInt(max - MIN_LEAF_SIZE) + MIN_LEAF_SIZE;
-
-        if (split_horizontal){
-
-            this.leftChild = new Leaf(this.x, this.y, this.width, split);
-            this.rightChild = new Leaf(this.x, this.y + split, this.width, this.height - split);
-
-        } else {
-
-            this.leftChild = new Leaf(this.x, this.y, split, this.height);
-            this.rightChild = new Leaf(this.x + split, this.y, this.width - split, this.height);
-        }
-
-        return true;
-
-
-
+    public void drawImage(Graphics g){
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawRect(this.x, this.y, this.width, this.height);
     }
 
 
