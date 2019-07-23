@@ -3,21 +3,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Stack;
+
 
 public class Generator extends JPanel {
 
-    public final int MAX_LEAF_SIZE = 300;
-    public final int MIN_LEAF_SIZE = 100;
-    public final int MAP_MAX_HEIGHT = 800;
-    public final int MAP_MAX_WIDTH = 800;
-    public final int MAX_LEAF_NUM = 25;
-
-    public Random rand = new Random();
+    public static final int MAX_LEAF_SIZE = 50;
+    public static final int MAP_MAX_HEIGHT = 400;
+    public static final int MAP_MAX_WIDTH = 400;
 
     public ArrayList<Leaf> leafs = new ArrayList<>();
-
-    public Leaf root = new Leaf(0, 0, MAP_MAX_HEIGHT, MAP_MAX_WIDTH);
 
     private BufferedImage screen;
     private Graphics2D buffer;
@@ -28,8 +22,10 @@ public class Generator extends JPanel {
         Generator gen = new Generator();
         Leaf root = new Leaf(0, 0, gen.MAP_MAX_HEIGHT, gen.MAP_MAX_WIDTH);
         gen.leafs.add(root);
-        gen.splitLeafs();
-
+        for (int i = 0; i < 4; i++) {
+            gen.splitLeafs();
+        }
+        gen.createRooms();
         Thread x;
         gen.init();
         try{
@@ -40,9 +36,6 @@ public class Generator extends JPanel {
         } catch (InterruptedException ignored){
 
         }
-
-
-
     }
 
     private void init(){
@@ -51,7 +44,7 @@ public class Generator extends JPanel {
         this.jf.setLayout(new BorderLayout());
         this.jf.add(this);
 
-        this.jf.setSize(MAP_MAX_WIDTH + 1, MAP_MAX_HEIGHT + 1);
+        this.jf.setSize(MAP_MAX_WIDTH + 200, MAP_MAX_HEIGHT + 200);
         this.jf.setResizable(false);
         jf.setLocationRelativeTo(null);
 
@@ -60,42 +53,29 @@ public class Generator extends JPanel {
 
         this.setBackground(Color.black);
         this.setForeground(Color.WHITE);
-
-
-    }
-
-    public boolean isSplittable(Leaf l){
-        if ((l.height > MAX_LEAF_SIZE || l.width > MAX_LEAF_SIZE) && (l.rightChild == null && l.leftChild == null) && (l.height >= this.MIN_LEAF_SIZE + 50 && l.width >= this.MIN_LEAF_SIZE + 50)){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean listIsSplittable(){
-        for (Leaf l : this.leafs){
-            if (isSplittable(l)){
-                return true;
-            }
-        }
-        return false;
     }
 
     public void splitLeafs(){
-        ArrayList<Leaf> new_leaf_list = new ArrayList<>();
-        while (this.leafs.size() <= MAX_LEAF_NUM && this.listIsSplittable()){
-            for (int i = 0; i < this.leafs.size(); i++){
-                if (this.isSplittable(this.leafs.get(i))){
-                    Leaf newLeaf = this.leafs.get(i);
-                    newLeaf.split();
-                    new_leaf_list.add(newLeaf);
-                    new_leaf_list.add(newLeaf.leftChild);
-                    new_leaf_list.add(newLeaf.rightChild);
-                }
-            }
-            this.leafs = new_leaf_list;
-        }
+      ArrayList<Leaf> tempList = new ArrayList<>();
+      for (Leaf l : leafs){
+          if (l.isSplittable()){
+              l.split();
+              tempList.add(l);
+              tempList.add(l.leftChild);
+              tempList.add(l.rightChild);
+          } else {
+              tempList.add(l);
+          }
+      }
+      this.leafs = tempList;
+    }
 
+    public void createRooms(){
+        for (Leaf l : leafs){
+            if (l.rightChild == null && l.leftChild == null){
+                l.createRoom();
+            }
+        }
     }
 
     public void paintComponent(Graphics g){
@@ -105,7 +85,7 @@ public class Generator extends JPanel {
         for (Leaf l : leafs){
             l.drawImage(buffer);
         }
-        g2.drawImage(screen, 0, 0, null);
+        g2.drawImage(screen, 97, 97, null);
     }
 
 }
