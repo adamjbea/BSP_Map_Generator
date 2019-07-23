@@ -60,8 +60,8 @@ public class Leaf{
     }
 
     public void createRoom(){
-        int randWidth = ThreadLocalRandom.current().nextInt(25, this.width - 2);
-        int randHeight = ThreadLocalRandom.current().nextInt(25, this.height - 2);
+        int randWidth = ThreadLocalRandom.current().nextInt(50, this.width - 2);
+        int randHeight = ThreadLocalRandom.current().nextInt(50, this.height - 2);
         int randX = ThreadLocalRandom.current().nextInt(1, this.width - randWidth - 1);
         int randY = ThreadLocalRandom.current().nextInt(1, this.height - randHeight - 1);
         this.room = new Rectangle(this.x + randX, this.y + randY, randWidth, randHeight);
@@ -69,7 +69,7 @@ public class Leaf{
 
     public void drawImage(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawRect(this.x, this.y, this.width - 1, this.height - 1);
+        //g2d.drawRect(this.x, this.y, this.width - 1, this.height - 1);
         if (this.room != null){
             g2d.fillRect(this.room.x, this.room.y, this.room.width, this.room.height);
         }

@@ -2,12 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class Generator extends JPanel {
 
-    public static final int MAX_LEAF_SIZE = 50;
+    public static final int MAX_LEAF_SIZE = 150;
     public static final int MAP_MAX_HEIGHT = 400;
     public static final int MAP_MAX_WIDTH = 400;
 
