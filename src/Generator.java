@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class Generator extends JPanel {
 
-    public static final int MAX_LEAF_SIZE = 150;
-    public static final int MAP_MAX_HEIGHT = 400;
-    public static final int MAP_MAX_WIDTH = 400;
+    public static final int MAX_LEAF_SIZE = 100;
+    public static final int MAP_MAX_HEIGHT = 600;
+    public static final int MAP_MAX_WIDTH = 600;
 
     public ArrayList<Leaf> leafs = new ArrayList<>();
 
