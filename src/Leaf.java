@@ -66,11 +66,23 @@ public class Leaf{
     }
 
     public void createRoom(){
-        int randWidth = ThreadLocalRandom.current().nextInt(Generator.MAX_LEAF_SIZE * 3 / 10, this.width - 2);
-        int randHeight = ThreadLocalRandom.current().nextInt(Generator.MAX_LEAF_SIZE * 3 / 10, this.height - 2);
+        int randWidth = ThreadLocalRandom.current().nextInt(this.width * 3 / 10, this.width - 2);
+        int randHeight = ThreadLocalRandom.current().nextInt(this.height * 3 / 10, this.height - 2);
         int randX = ThreadLocalRandom.current().nextInt(1, this.width - randWidth - 1);
         int randY = ThreadLocalRandom.current().nextInt(1, this.height - randHeight - 1);
         this.room = new Rectangle(this.x + randX, this.y + randY, randWidth, randHeight);
+    }
+
+    public boolean hasRoom(){
+        if (this.room != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void createHall(Rectangle r1, Rectangle r2){
+        
     }
 
     public void drawImage(Graphics g){
