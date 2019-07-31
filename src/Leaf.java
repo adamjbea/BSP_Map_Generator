@@ -13,7 +13,7 @@ public class Leaf{
 
     public Rectangle room;
 
-    public ArrayList<Rectangle> hallways;
+    public ArrayList<Rectangle> hallways = new ArrayList<>();
 
     public Leaf(int x, int y, int width, int height){
 
@@ -83,15 +83,45 @@ public class Leaf{
 
     public void createHall(Rectangle r1, Rectangle r2){
 
+        Rectangle hall = null;
+        int r1_center_x = (((r1.x + r1.width / 2)+5)/10)*10;
+        int r1_center_y = (((r1.y + r1.height / 2)+5)/10)*10;
+        int r2_center_x = (((r2.x + r2.width / 2)+5)/10)*10;
+        int r2_center_y = (((r2.y + r2.height / 2)+5)/10)*10;
+
+        if (r1_center_x == r2_center_x){
+            int top_room_y;
+            if (r1_center_y > r2_center_y){
+                top_room_y = r1_center_y;
+            }else{
+                top_room_y = r2_center_y;
+            }
+            this.hallways.add(new Rectangle(r1_center_x, top_room_y, 10, Math.abs(r1_center_y - r2_center_y)));
+        }else if(r1_center_y == r2_center_y){
+            int left_room_x;
+            if (r1_center_x > r2_center_x){
+                left_room_x = r2_center_x;
+            }else{
+                left_room_x = r2_center_x;
+            }
+            this.hallways.add(new Rectangle(left_room_x, r1_center_y, Math.abs(r2_center_x - r1_center_x), 10));
+        }
+
+
     }
 
     public void drawImage(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.green);
-        g2d.drawRect(this.x, this.y, this.width - 1, this.height - 1);
+        g2d.drawRect(this.x+1, this.y+1, this.width - 2, this.height - 2);
         if (this.room != null){
             g2d.setColor(Color.white);
             g2d.fillRect(this.room.x, this.room.y, this.room.width, this.room.height);
+        }
+        if (this.hallways != null){
+            for (Rectangle hall : this.hallways){
+                g2d.fillRect(hall.x, hall.y, hall.width, hall.height);
+            }
         }
     }
 

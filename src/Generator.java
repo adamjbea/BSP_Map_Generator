@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Generator extends JPanel {
 
     public static final int MAX_LEAF_SIZE = 50;
-    public static final int MAP_MAX_HEIGHT = 600;
-    public static final int MAP_MAX_WIDTH = 600;
+    public static final int MAP_MAX_HEIGHT = 500;
+    public static final int MAP_MAX_WIDTH = 500;
 
     public ArrayList<Leaf> leafs = new ArrayList<>();
 
@@ -25,6 +25,7 @@ public class Generator extends JPanel {
             gen.splitLeafs();
         }
         gen.createRooms();
+        gen.createHalls();
         Thread x;
         gen.init();
         try{
