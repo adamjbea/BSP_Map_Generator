@@ -82,7 +82,7 @@ public class Leaf{
     }
 
     public void createHall(Rectangle r1, Rectangle r2){
-        
+
     }
 
     public void drawImage(Graphics g){
