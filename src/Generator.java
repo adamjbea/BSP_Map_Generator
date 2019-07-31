@@ -95,6 +95,13 @@ public class Generator extends JPanel {
             l.drawImage(buffer);
         }
         g2.drawImage(screen, 97, 97, null);
+        g2.setColor(Color.gray);
+        for (int i = 0; i < Generator.MAP_MAX_WIDTH; i += 10){
+            g2.drawLine(i + 97, 97, i + 97, Generator.MAP_MAX_HEIGHT + 97);
+        }
+        for (int i = 0; i < Generator.MAP_MAX_HEIGHT; i+= 10){
+            g2.drawLine(97, i + 97, Generator.MAP_MAX_WIDTH + 97, i + 97);
+        }
     }
 
 }

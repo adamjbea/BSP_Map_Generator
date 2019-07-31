@@ -37,18 +37,18 @@ public class Leaf{
         int split;
         double ratio = ((double)this.width - (double)this.height) / 100;
         if (ratio > .25){
-            split = ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1);
+            split = ((ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1) + 5) / 10) * 10;
            this.verticalSplit(split);
         }else if (ratio < -.25) {
-            split = ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1);
+            split = ((ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1) + 5) / 10) * 10;
             this.horizontalSplit(split);
         } else {
             int split_choice = rand.nextInt(1);
             if (split_choice == 0){
-                split = ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1);
+                split = ((ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1) + 5) / 10) * 10;
                 this.verticalSplit(split);
             } else {
-                split = ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1);
+                split = ((ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1) + 5) / 10) * 10;
                 this.horizontalSplit(split);
             }
         }
@@ -66,10 +66,10 @@ public class Leaf{
     }
 
     public void createRoom(){
-        int randWidth = ThreadLocalRandom.current().nextInt(this.width * 3 / 10, this.width - 2);
-        int randHeight = ThreadLocalRandom.current().nextInt(this.height * 3 / 10, this.height - 2);
-        int randX = ThreadLocalRandom.current().nextInt(1, this.width - randWidth - 1);
-        int randY = ThreadLocalRandom.current().nextInt(1, this.height - randHeight - 1);
+        int randWidth = ((ThreadLocalRandom.current().nextInt(this.width * 3 / 10, this.width - 20) + 5) / 10) * 10;
+        int randHeight = ((ThreadLocalRandom.current().nextInt(this.height * 3 / 10, this.height - 20) + 5) / 10) * 10;
+        int randX = ((ThreadLocalRandom.current().nextInt(10, this.width - randWidth - 5) + 5) / 10) * 10;
+        int randY = ((ThreadLocalRandom.current().nextInt(10, this.height - randHeight - 5 ) + 5) / 10) * 10;
         this.room = new Rectangle(this.x + randX, this.y + randY, randWidth, randHeight);
     }
 
@@ -87,8 +87,10 @@ public class Leaf{
 
     public void drawImage(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.green);
         g2d.drawRect(this.x, this.y, this.width - 1, this.height - 1);
         if (this.room != null){
+            g2d.setColor(Color.white);
             g2d.fillRect(this.room.x, this.room.y, this.room.width, this.room.height);
         }
     }
