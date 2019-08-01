@@ -37,18 +37,18 @@ public class Leaf{
         int split;
         double ratio = ((double)this.width - (double)this.height) / 100;
         if (ratio > .25){
-            split = ((ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1) + 5) / 10) * 10;
+            split = Generator.round(ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1));
            this.verticalSplit(split);
         }else if (ratio < -.25) {
-            split = ((ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1) + 5) / 10) * 10;
+            split = Generator.round(ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1));
             this.horizontalSplit(split);
         } else {
             int split_choice = rand.nextInt(1);
             if (split_choice == 0){
-                split = ((ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1) + 5) / 10) * 10;
+                split = Generator.round(ThreadLocalRandom.current().nextInt(x + (width * 3 / 10), x + (width * 7 / 10) + 1));
                 this.verticalSplit(split);
             } else {
-                split = ((ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1) + 5) / 10) * 10;
+                split = Generator.round(ThreadLocalRandom.current().nextInt(y + (height * 3 / 10), y + (height * 7 / 10) + 1));
                 this.horizontalSplit(split);
             }
         }
@@ -66,10 +66,10 @@ public class Leaf{
     }
 
     public void createRoom(){
-        int randWidth = ((ThreadLocalRandom.current().nextInt(this.width * 3 / 10, this.width - 20) + 5) / 10) * 10;
-        int randHeight = ((ThreadLocalRandom.current().nextInt(this.height * 3 / 10, this.height - 20) + 5) / 10) * 10;
-        int randX = ((ThreadLocalRandom.current().nextInt(10, this.width - randWidth - 5) + 5) / 10) * 10;
-        int randY = ((ThreadLocalRandom.current().nextInt(10, this.height - randHeight - 5 ) + 5) / 10) * 10;
+        int randWidth = Generator.round(ThreadLocalRandom.current().nextInt(this.width * 3 / 10, this.width - 20));
+        int randHeight = Generator.round(ThreadLocalRandom.current().nextInt(this.height * 3 / 10, this.height - 20));
+        int randX = Generator.round(ThreadLocalRandom.current().nextInt(10, this.width - randWidth - 5));
+        int randY = Generator.round(ThreadLocalRandom.current().nextInt(10, this.height - randHeight - 5 ));
         this.room = new Rectangle(this.x + randX, this.y + randY, randWidth, randHeight);
     }
 
@@ -82,47 +82,52 @@ public class Leaf{
     }
 
     public void createHall(Rectangle r1, Rectangle r2){
-
-        Rectangle hall = null;
-        int r1_center_x = (((r1.x + r1.width / 2)+5)/10)*10;
-        int r1_center_y = (((r1.y + r1.height / 2)+5)/10)*10;
-        int r2_center_x = (((r2.x + r2.width / 2)+5)/10)*10;
-        int r2_center_y = (((r2.y + r2.height / 2)+5)/10)*10;
-
-        if (r1_center_x == r2_center_x){
-            int top_room_y;
-            if (r1_center_y > r2_center_y){
-                top_room_y = r1_center_y;
-            }else{
-                top_room_y = r2_center_y;
-            }
-            this.hallways.add(new Rectangle(r1_center_x, top_room_y, 10, Math.abs(r1_center_y - r2_center_y)));
-        }else if(r1_center_y == r2_center_y){
-            int left_room_x;
-            if (r1_center_x > r2_center_x){
-                left_room_x = r2_center_x;
-            }else{
-                left_room_x = r2_center_x;
-            }
-            this.hallways.add(new Rectangle(left_room_x, r1_center_y, Math.abs(r2_center_x - r1_center_x), 10));
+        Point r_1 = new Point(Generator.round(r1.x + r1.width / 2), Generator.round(r1.y + r1.height / 2));
+        Point r_2 = new Point(Generator.round(r2.x +r2.width / 2), Generator.round(r2.y +r2.height / 2));
+        Rectangle top, bottom, left, right;
+        if (r_1.x <= r_2.x){
+            left = r1;
+            right = r2;
+        }else{
+            left = r2;
+            right = r1;
+        }
+        if (r_1.y <= r_2.y){
+            top = r1;
+            bottom = r2;
+        }else{
+            top = r2;
+            bottom = r1;
         }
 
+        if(r_1.y == r_2.y){
+            this.hallways.add(new Rectangle(Generator.round(left.x + left.width / 2), Generator.round(left.y + left.width / 2), Generator.round(Math.abs(r_1.x - r_2.x)), 10));
+        }else if (r_1.x == r_2.x) {
+            this.hallways.add(new Rectangle(Generator.round(top.x + top.width / 2), Generator.round(top.y + top.height / 2), 10, Generator.round(Math.abs(r_1.y - r_2.y))));
+        }else{
+            this.hallways.add(new Rectangle(Generator.round(left.x + left.width / 2), Generator.round(left.y + left.width / 2), Generator.round(Math.abs(r_1.x - r_2.x)), 10));
+            this.hallways.add(new Rectangle(Generator.round(top.x + top.width / 2), Generator.round(top.y + top.height / 2), 10, Generator.round(Math.abs(r_1.y - r_2.y))));
+        }
 
     }
 
     public void drawImage(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.green);
-        g2d.drawRect(this.x+1, this.y+1, this.width - 2, this.height - 2);
-        if (this.room != null){
-            g2d.setColor(Color.white);
-            g2d.fillRect(this.room.x, this.room.y, this.room.width, this.room.height);
+        g2d.setColor(Color.white);
+        if (this.leftChild != null && this.leftChild.room != null){
+            g2d.fillRect(this.leftChild.room.x, this.leftChild.room.y, this.leftChild.room.width, this.leftChild.room.height);
         }
+        if (this.rightChild != null && this.rightChild.room != null){
+            g2d.fillRect(this.rightChild.room.x, this.rightChild.room.y, this.rightChild.room.width, this.rightChild.room.height);
+        }
+        g2d.setColor(Color.green);
         if (this.hallways != null){
             for (Rectangle hall : this.hallways){
                 g2d.fillRect(hall.x, hall.y, hall.width, hall.height);
             }
         }
+
+        g2d.drawRect(this.x+1, this.y+1, this.width - 2, this.height - 2);
     }
 
 

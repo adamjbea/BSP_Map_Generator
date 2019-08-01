@@ -86,15 +86,20 @@ public class Generator extends JPanel {
         }
     }
 
+    public static int round(int num){
+        return ((num + 5) / 10) * 10;
+    }
+
+    public static double round(double num){
+        return ((num + 5) / 10) * 10;
+    }
+
 
 
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
         buffer = screen.createGraphics();
         super.paintComponent(g2);
-        for (Leaf l : leafs){
-            l.drawImage(buffer);
-        }
         g2.drawImage(screen, 97, 97, null);
         g2.setColor(Color.gray);
         for (int i = 0; i < Generator.MAP_MAX_WIDTH; i += 10){
@@ -103,6 +108,10 @@ public class Generator extends JPanel {
         for (int i = 0; i < Generator.MAP_MAX_HEIGHT; i+= 10){
             g2.drawLine(97, i + 97, Generator.MAP_MAX_WIDTH + 97, i + 97);
         }
+        for (Leaf l : leafs){
+            l.drawImage(buffer);
+        }
+
     }
 
 }
