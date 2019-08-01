@@ -21,7 +21,7 @@ public class Generator extends JPanel {
         Generator gen = new Generator();
         Leaf root = new Leaf(0, 0, gen.MAP_MAX_HEIGHT, gen.MAP_MAX_WIDTH);
         gen.leafs.add(root);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             gen.splitLeafs();
         }
         gen.createRooms();
@@ -89,12 +89,6 @@ public class Generator extends JPanel {
     public static int round(int num){
         return ((num + 5) / 10) * 10;
     }
-
-    public static double round(double num){
-        return ((num + 5) / 10) * 10;
-    }
-
-
 
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;

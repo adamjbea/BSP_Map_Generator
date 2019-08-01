@@ -99,14 +99,18 @@ public class Leaf{
             top = r2;
             bottom = r1;
         }
+        Point top_center = new Point(Generator.round(top.x + top.width / 2), Generator.round(top.y + top.height / 2));
+        Point bottom_center = new Point(Generator.round(bottom.x + bottom.width / 2), Generator.round(bottom.y + bottom.height / 2));
+        Point left_center = new Point(Generator.round(left.x + left.width / 2), Generator.round(left.y + left.height / 2));
+        Point right_center = new Point(Generator.round(right.x + right.width / 2), Generator.round(right.y + right.height / 2));
 
         if(r_1.y == r_2.y){
-            this.hallways.add(new Rectangle(Generator.round(left.x + left.width / 2), Generator.round(left.y + left.width / 2), Generator.round(Math.abs(r_1.x - r_2.x)), 10));
+            this.hallways.add(new Rectangle(left_center.x, left_center.y, Generator.round(right_center.x - left_center.y), 10));
         }else if (r_1.x == r_2.x) {
-            this.hallways.add(new Rectangle(Generator.round(top.x + top.width / 2), Generator.round(top.y + top.height / 2), 10, Generator.round(Math.abs(r_1.y - r_2.y))));
+            this.hallways.add(new Rectangle(top_center.x, top_center.y, 10, Generator.round(bottom_center.y - top_center.y)));
         }else{
-            this.hallways.add(new Rectangle(Generator.round(left.x + left.width / 2), Generator.round(left.y + left.width / 2), Generator.round(Math.abs(r_1.x - r_2.x)), 10));
-            this.hallways.add(new Rectangle(Generator.round(top.x + top.width / 2), Generator.round(top.y + top.height / 2), 10, Generator.round(Math.abs(r_1.y - r_2.y))));
+            this.hallways.add(new Rectangle(left_center.x, bottom_center.y, Generator.round(right_center.x - left_center.x), 10));
+            this.hallways.add(new Rectangle(top_center.x, top_center.y, 10, Generator.round(bottom_center.y - top_center.y)));
         }
 
     }
@@ -120,7 +124,6 @@ public class Leaf{
         if (this.rightChild != null && this.rightChild.room != null){
             g2d.fillRect(this.rightChild.room.x, this.rightChild.room.y, this.rightChild.room.width, this.rightChild.room.height);
         }
-        g2d.setColor(Color.green);
         if (this.hallways != null){
             for (Rectangle hall : this.hallways){
                 g2d.fillRect(hall.x, hall.y, hall.width, hall.height);
